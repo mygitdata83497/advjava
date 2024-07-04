@@ -3,6 +3,7 @@ package com.sunbeam.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -40,18 +41,12 @@ public class LoginServlet extends HttpServlet {
 				HttpSession session = req.getSession();
 				session.setAttribute("curuser", user);
 				
-				//login successful
-				System.out.println("Login Successful:"+user);
 				if (user.getRole().equals("voter")) {
 					//voter login
 					resp.sendRedirect("canlist");
-					
-					//RequestDispatcher rd = req.getRequestDispatcher("canlist");
-					//rd.forward(req,resp);
-					
+				
 				}
 				else {
-					//admin login
 					resp.sendRedirect("result");
 				}
 			}
@@ -63,6 +58,11 @@ public class LoginServlet extends HttpServlet {
 				out.println("<title>Login Failed</title>");
 				out.println("</head>");
 				out.println("<body>");
+				
+				ServletContext app = this.getServletContext();
+				String appTitle = app.getInitParameter("AppTitle");
+				out.printf("<h3>%s</h3>", appTitle);
+				
 				out.println("Invalid email or password.<br/><br/>");
 				out.println("<a href='index.html'>Login Again</a>");
 				out.println("</body>");

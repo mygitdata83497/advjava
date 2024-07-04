@@ -36,17 +36,36 @@ public class CandidateDaoImpl extends Dao implements CandidateDao {
 					list.add(c);
 				}
 			} // rs.close();
-		} // stmt.close();
+		} // stmt.close()
 		return list;
 	}
 	public int incrementVote(int candidateId) throws Exception {
-		String sql = "UPDATE candidates SET votes=votes+1 WHERE id=?";
+		String sql = "UPDATE candidates SET votes=votes1 WHERE id=?";
 		try(PreparedStatement stmt = con.prepareStatement(sql)) {
 			stmt.setInt(1, candidateId);
 			int cnt = stmt.executeUpdate();
 			return cnt; 
 		} //stmt.close();
 	}
+	
+	public Candidate findById(int id) throws Exception {
+				String sql = "SELECT * FROM candidates WHERE id=?";
+				try(PreparedStatement stmt = con.prepareStatement(sql)) {
+					stmt.setInt(1, id);
+					try(ResultSet rs = stmt.executeQuery()) {
+						if(rs.next()) {
+							id = rs.getInt("id");
+							String name = rs.getString("name");
+							String party = rs.getString("party");
+							int votes = rs.getInt("votes");
+							Candidate c = new Candidate(id, name, party, votes);
+							return c;
+						}
+					} // rs.close();
+				} // stmt.close();
+				return null;
+			}
+	
 	public List<Candidate> findByParty(String givenParty) throws Exception {
 		List<Candidate> list = new ArrayList<>();
 		String sql = "SELECT * FROM candidates WHERE party=?";

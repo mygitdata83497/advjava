@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -75,6 +76,10 @@ public class VoteServlet extends HttpServlet {
 		out.println("<title>Voted</title>");
 		out.println("</head>");
 		out.println("<body>");
+		
+		ServletContext app = this.getServletContext();
+		String appTitle = app.getInitParameter("AppTitle");
+		out.printf("<h3>%s</h3>", appTitle);
 		
 		out.println("<h3>Online Voting</h3>");
 			String userName = "";
